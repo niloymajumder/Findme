@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { DndContext, closestCenter } from '@dnd-kit/core';
-import { arrayMove, SortableContext, horizontalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { arrayMove, SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import logoIcon from '../../images/favicon.ico';
 
-function SortableTile({ id, label, active, onSelect }) {
+const libraryItems = ['Header block', 'Link stack', 'Featured card', 'Embed block', 'Contact row'];
+
+function SortableTile({ id, label, type, active, onSelect }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -11,26 +15,38 @@ function SortableTile({ id, label, active, onSelect }) {
   };
 
   return (
-    <button ref={setNodeRef} style={style} {...attributes} {...listeners} className={`canvas-tile ${active ? 'active' : ''}`} onClick={onSelect}>
-      {label}
+    <button
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`sortable-card ${active ? 'active' : ''}`}
+      onClick={onSelect}
+    >
+      <strong>{label}</strong>
+      <span>{type}</span>
     </button>
   );
 }
 
 function DashboardPage() {
   const [cards, setCards] = useState([
-    { id: 'instagram', label: 'Instagram Card' },
-    { id: 'portfolio', label: 'Featured Project' },
-    { id: 'contact', label: 'Contact Card' },
-    { id: 'stats', label: 'Stats Card' }
+    { id: 'hero', label: 'Profile Header', type: 'header', url: 'https://findme.link' },
+    { id: 'links', label: 'Primary Links', type: 'stack', url: 'https://example.com' },
+    { id: 'feature', label: 'Featured Content', type: 'feature', url: 'https://example.com/story' },
+    { id: 'social', label: 'Social Grid', type: 'social', url: 'https://instagram.com' }
   ]);
-  const [selectedId, setSelectedId] = useState('instagram');
+  const [selectedId, setSelectedId] = useState('hero');
 
   useEffect(() => {
     document.title = 'Findme Dashboard';
   }, []);
 
   const selected = useMemo(() => cards.find((c) => c.id === selectedId), [cards, selectedId]);
+
+  function updateSelected(key, value) {
+    setCards((items) => items.map((item) => (item.id === selectedId ? { ...item, [key]: value } : item)));
+  }
 
   function onDragEnd(event) {
     const { active, over } = event;
@@ -43,38 +59,75 @@ function DashboardPage() {
   }
 
   return (
-    <main className="dashboard-wrap">
-      <header className="dash-top">
-        <div className="dash-user"><div className="avatar sm">N</div><span>@niloy</span></div>
-        <div className="dash-actions"><button className="btn btn-ghost">View live</button><button className="btn btn-primary">Save</button></div>
-      </header>
+    <main className="dashboard-page">
+      <div className="site-container dash-shell">
+        <header className="dash-header">
+          <div className="dash-identity">
+            <img src={logoIcon} alt="Findme icon" />
+            <div>
+              <strong>Findme Studio</strong>
+              <span>@niloy</span>
+            </div>
+          </div>
+          <div className="dash-actions">
+            <Link to="/niloy" className="pill-btn ghost">View live</Link>
+            <button className="pill-btn primary">Save changes</button>
+          </div>
+        </header>
 
-      <div className="dash-grid">
-        <aside className="panel"><h3>Card Palette</h3><p>Platform</p><p>Featured</p><p>Quote</p><p>Contact</p></aside>
-        <section className="panel canvas">
-          <h3>Live Preview</h3>
-          <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-            <SortableContext items={cards.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
-              <div className="canvas-list">
-                {cards.map((card) => (
-                  <SortableTile
-                    key={card.id}
-                    id={card.id}
-                    label={card.label}
-                    active={selectedId === card.id}
-                    onSelect={() => setSelectedId(card.id)}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-        </section>
-        <aside className="panel">
-          <h3>Properties</h3>
-          <label className="field"><span>Label</span><input value={selected?.label || ''} readOnly /></label>
-          <label className="field"><span>Link</span><input value="https://" readOnly /></label>
-          <label className="field"><span>Size</span><select><option>S</option><option>M</option><option>L</option></select></label>
-        </aside>
+        <div className="dash-columns">
+          <aside className="dash-panel">
+            <h3 className="panel-title">Library</h3>
+            <div className="library-list">
+              {libraryItems.map((item) => (
+                <p key={item} className="library-item">{item}</p>
+              ))}
+            </div>
+          </aside>
+
+          <section className="dash-panel preview-stage">
+            <h3 className="panel-title">Live preview order</h3>
+            <p className="panel-subtitle">Drag cards to reorder your public profile flow.</p>
+
+            <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+              <SortableContext items={cards.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+                <div className="preview-list">
+                  {cards.map((card) => (
+                    <SortableTile
+                      key={card.id}
+                      id={card.id}
+                      label={card.label}
+                      type={card.type}
+                      active={selectedId === card.id}
+                      onSelect={() => setSelectedId(card.id)}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          </section>
+
+          <aside className="dash-panel">
+            <h3 className="panel-title">Inspector</h3>
+            <label className="inspector-field">
+              <span>Label</span>
+              <input value={selected?.label || ''} onChange={(e) => updateSelected('label', e.target.value)} />
+            </label>
+            <label className="inspector-field">
+              <span>URL</span>
+              <input value={selected?.url || ''} onChange={(e) => updateSelected('url', e.target.value)} />
+            </label>
+            <label className="inspector-field">
+              <span>Type</span>
+              <select value={selected?.type || 'stack'} onChange={(e) => updateSelected('type', e.target.value)}>
+                <option value="header">Header</option>
+                <option value="stack">Stack</option>
+                <option value="feature">Feature</option>
+                <option value="social">Social</option>
+              </select>
+            </label>
+          </aside>
+        </div>
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import logoBlue from '../../images/Logo-Blue-01.png';
 
 function NotFoundPage() {
   useEffect(() => {
@@ -7,15 +8,17 @@ function NotFoundPage() {
   }, []);
 
   return (
-    <main className="not-found">
-      <h1>Hmm. Lost?</h1>
-      <p>This Findme doesn&apos;t exist - yet.</p>
-      <svg viewBox="0 0 200 140" className="lost-svg" fill="none">
-        <path d="M15 95c20-40 40-40 60 0s40 40 60 0 40-40 50 0" stroke="#7B8CDE" strokeWidth="6" strokeLinecap="round" />
-        <circle cx="66" cy="48" r="5" fill="#7B8CDE" />
-        <circle cx="126" cy="48" r="5" fill="#7B8CDE" />
-      </svg>
-      <Link to="/join" className="btn btn-danger">Claim this name &rarr;</Link>
+    <main className="notfound-page">
+      <section className="notfound-card">
+        <img src={logoBlue} alt="Findme" className="notfound-logo" />
+        <p className="section-tag">404</p>
+        <h1 className="notfound-title">This profile is not live yet.</h1>
+        <p className="notfound-copy">Claim the handle and publish a full branded page in under a minute.</p>
+        <div className="notfound-actions">
+          <Link to="/join" className="pill-btn primary">Claim this name</Link>
+          <Link to="/" className="pill-btn ghost">Go home</Link>
+        </div>
+      </section>
     </main>
   );
 }
