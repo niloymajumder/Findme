@@ -56,7 +56,7 @@ function LandingPage() {
             </p>
             <div className="hero-actions" data-reveal>
               <Link to="/join" className="btn btn-primary">Get your Findme</Link>
-              <a href="#examples" className="btn btn-ghost">See live example -></a>
+              <a href="#examples" className="btn btn-ghost">See live example &rarr;</a>
             </div>
             <svg className="squiggle" viewBox="0 0 300 40" fill="none"><path d="M4 20c25-18 50 18 75 0s50-18 75 0 50 18 75 0 50-18 67 0" stroke="#7B8CDE" strokeWidth="3" strokeLinecap="round"/></svg>
             <BentoGrid cards={demoCards} className="mini-grid" />

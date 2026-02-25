@@ -15,7 +15,7 @@ function NotFoundPage() {
         <circle cx="66" cy="48" r="5" fill="#7B8CDE" />
         <circle cx="126" cy="48" r="5" fill="#7B8CDE" />
       </svg>
-      <Link to="/join" className="btn btn-danger">Claim this name -></Link>
+      <Link to="/join" className="btn btn-danger">Claim this name &rarr;</Link>
     </main>
   );
 }
