@@ -1,216 +1,98 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navigation from '../components/Navigation';
-import logoBlue from '../../images/Logo-Blue-01.png';
-import demoPreview from '../../images/Demo.png';
-import feedPreview from '../../images/Findme-Demo-01.jpg';
-import logoWhite from '../../images/Findme-logo-white-01.png';
+import SiteNav from '../components/SiteNav';
+import PostcardPreview from '../components/PostcardPreview';
 
-const mockLinks = [
-  'Book a strategy call',
-  'Watch the newest build video',
-  'Download the creator kit',
-  'Shop limited release templates'
-];
-
-const insideCards = [
+const previews = [
   {
-    title: 'Brand first profile',
-    text: 'Use your own imagery and voice. Findme does not look like a generic profile builder.',
-    image: feedPreview
+    recipient: 'Aria',
+    playlistUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd',
+    message: 'Happy birthday. Every track here reminds me of your laugh and late-night drives.',
+    photoUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
+    theme: 'romantic',
+    font: 'serif',
+    accent: '#D8A7B1',
+    mode: 'light',
+    animation: 'fade'
   },
   {
-    title: 'Practice-style structure',
-    text: 'Editorial sections, clear hierarchy, and rhythm make the page feel like a small website.'
+    recipient: 'Milo',
+    playlistUrl: 'https://music.apple.com/us/playlist/coffeehouse/pl.u-8aAVXj9Fv7A0N',
+    message: 'For the days we miss each other. Press play and stay here for a minute.',
+    photoUrl: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80',
+    theme: 'friendship',
+    font: 'serif',
+    accent: '#8FBBD9',
+    mode: 'light',
+    animation: 'float'
   },
   {
-    title: 'Linktree-style speed',
-    text: 'Fast setup, vertical link stack patterns, and mobile-first tap targets out of the box.'
+    recipient: 'Kai',
+    playlistUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6',
+    message: 'Even when this chapter ended, your songs stayed. Keep this as a soft goodbye.',
+    photoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80',
+    theme: 'cinematic',
+    font: 'sans',
+    accent: '#C9C3E6',
+    mode: 'dark',
+    animation: 'grain'
   }
-];
-
-const templateCards = [
-  {
-    name: 'Creator Board',
-    caption: 'Large intro + stacked quick links + featured project',
-    image: demoPreview
-  },
-  {
-    name: 'Studio Profile',
-    caption: 'For teams publishing updates, services, and inquiry links',
-    image: logoBlue
-  },
-  {
-    name: 'Personal Launchpad',
-    caption: 'Simple page with social links, newsletter, and one CTA',
-    image: feedPreview
-  }
-];
-
-const creatorSamples = [
-  ['@noah.builds', 'Product maker'],
-  ['@sana.visuals', 'Visual designer'],
-  ['@kev.music', 'Producer'],
-  ['@maya.codes', 'Developer educator']
 ];
 
 function LandingPage() {
   useEffect(() => {
-    document.title = 'Findme | Link in bio, rebuilt';
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-      },
-      { threshold: 0.12 }
-    );
-
-    document.querySelectorAll('[data-reveal]').forEach((el, i) => {
-      el.style.transitionDelay = `${i * 60}ms`;
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    document.title = 'EchoPost | Turn a playlist into a postcard';
   }, []);
 
   return (
-    <div className="landing-page">
-      <Navigation />
+    <div className="page-root">
+      <SiteNav />
+
       <main>
-        <section className="hero-stage">
-          <div className="site-container hero-grid">
-            <article className="hero-copy" data-reveal>
-              <p className="section-tag">Findme 2.0</p>
-              <h1 className="hero-title">
-                Link in bio, <strong>without looking like everyone else.</strong>
-              </h1>
-              <p className="hero-subtitle">
-                A complete redesign for creators and teams who want the speed of Linktree with a more branded, editorial layout.
-              </p>
-              <div className="hero-actions">
-                <Link to="/join" className="pill-btn primary">Build your page</Link>
-                <a href="#templates" className="pill-btn ghost">See templates</a>
+        <section className="hero-section shell">
+          <p className="eyebrow">Say it with music</p>
+          <h1>Turn a playlist into a postcard.</h1>
+          <p>Music, words, and memory - all in one beautiful link.</p>
+          <Link className="btn primary" to="/create">Create Your Postcard</Link>
+        </section>
+
+        <section className="steps-section shell">
+          <h2>How it works</h2>
+          <div className="steps-grid">
+            <article className="card step-card">
+              <span>01</span>
+              <h3>Add your playlist</h3>
+              <p>Paste Spotify or Apple Music URL and we render the embed instantly.</p>
+            </article>
+            <article className="card step-card">
+              <span>02</span>
+              <h3>Write your message</h3>
+              <p>Create a personal note with optional typewriter reveal.</p>
+            </article>
+            <article className="card step-card">
+              <span>03</span>
+              <h3>Share your link</h3>
+              <p>Publish at a unique slug and send a private or public memory page.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="showcase-section shell">
+          <h2>Preview themes</h2>
+          <div className="showcase-grid">
+            {previews.map((preview) => (
+              <div key={preview.recipient} className="phone-mock">
+                <PostcardPreview postcard={preview} compact />
               </div>
-              <p className="hero-note">One page. Better first impression. Share anywhere.</p>
-            </article>
-
-            <article className="hero-visual" data-reveal>
-              <div className="phone-shell">
-                <header className="phone-head">
-                  <div className="phone-user">
-                    <img src={logoBlue} alt="Findme brand" className="phone-avatar" />
-                    <div>
-                      <strong>@findme</strong>
-                      <p>Creator profile preview</p>
-                    </div>
-                  </div>
-                  <span className="phone-badge">Live</span>
-                </header>
-
-                <ul className="phone-links">
-                  {mockLinks.map((item) => (
-                    <li key={item} className="phone-link">{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          </div>
-
-          <div className="site-container metric-row">
-            <article className="metric-card" data-reveal>
-              <h3>60 sec setup</h3>
-              <p>Claim a name, choose links, launch.</p>
-            </article>
-            <article className="metric-card" data-reveal>
-              <h3>Mobile tuned</h3>
-              <p>Large tap areas and strong contrast for phones.</p>
-            </article>
-            <article className="metric-card" data-reveal>
-              <h3>Brand assets</h3>
-              <p>Logo + image support directly from your library.</p>
-            </article>
+            ))}
           </div>
         </section>
 
-        <section id="inside" className="inside-strip">
-          <div className="site-container">
-            <div className="section-head">
-              <p className="section-tag">Built with your brand files</p>
-              <h2>From quick links to a real branded presence.</h2>
-            </div>
-            <div className="inside-grid">
-              {insideCards.map((card) => (
-                <article className="inside-card" key={card.title} data-reveal>
-                  {card.image && <img src={card.image} alt={card.title} />}
-                  <h3>{card.title}</h3>
-                  <p>{card.text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="templates" className="template-section">
-          <div className="site-container">
-            <div className="section-head">
-              <p className="section-tag">Template direction</p>
-              <h2>Three looks. One consistent UX.</h2>
-            </div>
-            <div className="template-grid">
-              {templateCards.map((template) => (
-                <article className="template-card" key={template.name} data-reveal>
-                  <div className="template-thumb">
-                    <img src={template.image} alt={template.name} />
-                  </div>
-                  <h3>{template.name}</h3>
-                  <p>{template.caption}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="examples" className="showcase-band">
-          <div className="site-container">
-            <div className="section-head">
-              <p className="section-tag">Creator examples</p>
-              <h2>Profiles that feel custom, not cloned.</h2>
-            </div>
-            <div className="showcase-grid">
-              {creatorSamples.map(([handle, role]) => (
-                <article className="creator-tile" key={handle} data-reveal>
-                  <h3>{handle}</h3>
-                  <p>{role}</p>
-                  <a href={`/${handle.replace('@', '')}`}>Open profile</a>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="final-cta">
-          <div className="site-container cta-box" data-reveal>
-            <img src={logoWhite} alt="Findme" className="cta-logo" />
-            <h2>Launch your new Findme page now.</h2>
-            <p>Use your current links and branding assets. Publish in minutes.</p>
-            <Link to="/join" className="pill-btn primary">Start free</Link>
-          </div>
+        <section className="cta-section shell">
+          <h2>Some feelings deserve better than a link.</h2>
+          <Link className="btn primary" to="/create">Create Yours</Link>
         </section>
       </main>
-
-      <footer className="site-footer">
-        <div className="site-container footer-inner">
-          <p>Findme</p>
-          <div className="footer-links">
-            <a href="#inside">Inside</a>
-            <a href="#templates">Templates</a>
-            <a href="#examples">Examples</a>
-            <Link to="/join">Join</Link>
-          </div>
-          <span>findme.link</span>
-        </div>
-      </footer>
     </div>
   );
 }
