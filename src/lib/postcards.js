@@ -6,6 +6,13 @@ function nowISO() {
   return new Date().toISOString();
 }
 
+function generateId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `postcard-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+}
+
 function parseJSON(value, fallback) {
   try {
     return JSON.parse(value) ?? fallback;
@@ -55,7 +62,7 @@ export function ensureUniqueSlug(baseSlug, postcards, ignoreId) {
 }
 
 export function buildPostcard(input, existing) {
-  const id = existing?.id || crypto.randomUUID();
+  const id = existing?.id || generateId();
   const createdAt = existing?.createdAt || nowISO();
   const updatedAt = nowISO();
   return {
@@ -118,7 +125,7 @@ export function duplicatePostcard(id) {
 
   const clone = {
     ...source,
-    id: crypto.randomUUID(),
+    id: generateId(),
     slug: ensureUniqueSlug(source.slug, cards),
     createdAt: nowISO(),
     updatedAt: nowISO()
@@ -144,4 +151,3 @@ export function getRemainingMs(postcard) {
   const expiresAt = created + hours * 60 * 60 * 1000;
   return Math.max(0, expiresAt - Date.now());
 }
-
