@@ -1,6 +1,6 @@
-# EchoPost
+# Findme
 
-EchoPost is a playlist-powered digital postcard platform.
+Findme is a playlist-powered digital postcard platform.
 
 Users can create a shareable page that combines:
 - A Spotify or Apple Music playlist
